@@ -64,7 +64,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        margin: 20px 0;
+        margin: 1rem;
         position: relative;
       }
 
@@ -88,6 +88,9 @@
 
       #super-header {
         background-color: var(--secondary-bg);
+      }
+      #super-footer {
+        margin-bottom: 4rem;
       }
 
       #super-footer > .super-container {
@@ -142,11 +145,73 @@
         text-align: center;
       }
 
-      /* 📱 Responsive Media Queries */
+           /* 📱 Botón de menú flotante */
+           .menu-btn {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background: var(--accent-color);
+        color: white;
+        border: none;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        font-size: 24px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease;
+        z-index: 10;
+      }
+
+      .menu-btn:hover {
+        transform: scale(1.1);
+      }
+
+      /* 📋 Menú hamburguesa */
+      .mobile-menu {
+        position: fixed;
+        bottom: 0;
+        z-index: 9;
+        left: 0;
+        width: 100%;
+        background: var(--secondary-bg);
+        padding: 10px;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        display: none;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .mobile-menu a {
+        color: var(--primary-text);
+        padding: 10px;
+        background: var(--primary-bg);
+        border-radius: 5px;
+        text-align: center;
+        font-size: 14px;
+        font-weight: bold;
+        display: block;
+      }
+
+      .mobile-menu a:hover {
+        background: var(--accent-color);
+        color: white;
+      }
+
+      /* 📏 Responsive: Oculta la barra normal en móviles */
       @media (max-width: 768px) {
         .navbar {
-          flex-direction: column;
-          text-align: center;
+          display: none;
+        }
+        .menu-btn {
+          display: flex;
+        }
+        #super-footer>.super-container {
+          flex-flow:row wrap;
         }
       }
     </style>
@@ -188,28 +253,42 @@
       </div>
     </main>
 
-    <script>
-      function toggleTheme() {
-        document.body.classList.toggle("dark-mode");
-        localStorage.setItem("theme", document.body.classList.contains("dark-mode") ? "dark" : "light");
+  <!-- 📱 Menú Hamburguesa para móviles -->
+  <button class="menu-btn" onclick="toggleMenu()">☰</button>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#">Producto</a>
+    <a href="#">Supers</a>
+    <a href="#">Tickets</a>
+    <a href="#">Usuario</a>
+  </div>
+
+  <script>
+    function toggleTheme() {
+      document.body.classList.toggle("dark-mode");
+      localStorage.setItem("theme", document.body.classList.contains("dark-mode") ? "dark" : "light");
+    }
+
+    (function () {
+      if (localStorage.getItem("theme") === "dark") {
+        document.body.classList.add("dark-mode");
       }
+    })();
 
-      (function () {
-        if (localStorage.getItem("theme") === "dark") {
-          document.body.classList.add("dark-mode");
-        }
-      })();
+    function filterItems() {
+      let input = document.getElementById("searchInput").value.toLowerCase();
+      let items = document.querySelectorAll(".box");
 
-      function filterItems() {
-        let input = document.getElementById("searchInput").value.toLowerCase();
-        let items = document.querySelectorAll(".box");
+      items.forEach((item) => {
+        let text = item.textContent.toLowerCase();
+        item.style.display = text.includes(input) ? "block" : "none";
+      });
+    }
 
-        items.forEach((item) => {
-          let text = item.textContent.toLowerCase();
-          item.style.display = text.includes(input) ? "block" : "none";
-        });
-      }
-    </script>
+    function toggleMenu() {
+      let menu = document.getElementById("mobileMenu");
+      menu.style.display = menu.style.display === "flex" ? "none" : "flex";
+    }
+  </script>
     </main>
 
     <footer id="super-footer">
